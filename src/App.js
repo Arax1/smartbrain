@@ -4,6 +4,7 @@ import SignIn from './components/SignIn/SignIn';
 import Register from './components/Register/Register';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
+import RadioBar from './components/RadioBar/RadioBar';
 import Rank from './components/Rank/Rank';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import Particles from 'react-particles-js';
@@ -101,6 +102,7 @@ class App extends Component {
           ? <>
             <Logo />
             <Rank />
+            <RadioBar />
             <ImageLinkForm onSubmit={this.onSubmit} onInputChange={this.onInputChange} />
             <FaceRecognition imageURL={imageUrl} box={box} />
           </>
