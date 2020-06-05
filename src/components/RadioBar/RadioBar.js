@@ -2,23 +2,23 @@ import React from 'react';
 import './RadioBar.scss';
 
 
-const RadioBar = () => {
+const RadioBar = ({ onRadioChange }) => {
 
     return (
-        <div class="container">
-            <div class="radio">
-                <input id="radio-1" name="radio" type="radio" />
-                <label for="radio-1" class="radio-label"><span class="white">Image</span></label>
+        <div className="container">
+            <div className="radio">
+                <input id="image" name="radio" type="radio" value="image" onChange={onRadioChange} />
+                <label htmlFor="image" className="radio-label"><span className="white">Image</span></label>
             </div>
 
-            <div class="radio">
-                <input id="radio-2" name="radio" type="radio" />
-                <label for="radio-2" class="radio-label"><span class="white">Color</span></label>
+            <div className="radio">
+                <input id="color" name="radio" type="radio" value="color" onChange={onRadioChange} />
+                <label htmlFor="color" className="radio-label"><span className="white">Color</span></label>
             </div>
 
-            <div class="radio">
-                <input id="radio-3" name="radio" type="radio" />
-                <label for="radio-3" class="radio-label"><span class="white">Pattern</span></label>
+            <div className="radio">
+                <input id="pattern" name="radio" type="radio" value="pattern" onChange={onRadioChange} />
+                <label htmlFor="pattern" className="radio-label"><span className="white">Pattern</span></label>
             </div>
         </div>
     );

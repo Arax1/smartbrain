@@ -38,6 +38,7 @@ class App extends Component {
       input: '',
       imageUrl: '',
       box: {},
+      radio: 'image',
       route: 'signin',
       isSignedIn: false
     }
@@ -66,19 +67,33 @@ class App extends Component {
     this.setState({ input: event.target.value })
   }
 
+  onRadioChange = (event) => {
+    this.setState({ radio: event.target.value })
+  }
+
   onSubmit = () => {
 
     this.setState({ imageUrl: this.state.input });
 
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
-      .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
-      .catch(err => console.log(err));
+    if (this.state.radio == 'color') {
+      app.models
+        .predict(Clarifai.COLOR_MODEL, this.state.input)
+        .then(response => console.log(response))
+    }
+
+    else {
+      app.models
+        .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+        .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
+        .catch(err => console.log(err));
+    }
+
+
 
   }
 
   onRouteChange = (newroute) => {
-    console.log(newroute);
+
     if (newroute === 'signout') {
       this.setState({ isSignedIn: false })
     }
@@ -89,8 +104,10 @@ class App extends Component {
     this.setState({ route: newroute });
   }
 
+
+
   render() {
-    const { isSignedIn, box, imageUrl, route } = this.state;
+    const { isSignedIn, box, imageUrl, route, radio } = this.state;
 
     return (
       <div className="App">
@@ -102,13 +119,13 @@ class App extends Component {
           ? <>
             <Logo />
             <Rank />
-            <RadioBar />
+            <RadioBar onRadioChange={this.onRadioChange} />
             <ImageLinkForm onSubmit={this.onSubmit} onInputChange={this.onInputChange} />
             <FaceRecognition imageURL={imageUrl} box={box} />
           </>
           : (route === 'signin'
             ? <SignIn onRouteChange={this.onRouteChange} />
-            : <Register onRouteChange={this.onRouteChange} />
+            : <Register rv={radio} onRouteChange={this.onRouteChange} />
           )
         }
       </div>
