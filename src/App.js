@@ -4,6 +4,7 @@ import SignIn from './components/SignIn/SignIn';
 import Register from './components/Register/Register';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
+import ColorList from './components/ColorList/ColorList';
 import RadioBar from './components/RadioBar/RadioBar';
 import Rank from './components/Rank/Rank';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
@@ -12,6 +13,7 @@ import Clarifai from 'clarifai';
 
 import './App.css';
 import 'tachyons';
+import ColorCard from './components/ColorCard/ColorCard';
 
 
 const app = new Clarifai.App({
@@ -40,7 +42,9 @@ class App extends Component {
       box: {},
       radio: 'image',
       route: 'signin',
-      isSignedIn: false
+      isSignedIn: false,
+      color_hidden: false,
+      color_objects: {}
     }
   }
 
@@ -56,6 +60,11 @@ class App extends Component {
       rightCol: width - (clarafaiFace.right_col * width),
       bottomRow: height - (clarafaiFace.bottom_row * height)
     }
+  }
+
+  setColorObjects = (data) => {
+    this.setState({ color_objects: data.outputs[0].data.colors });
+    this.setState({ color_hidden: true })
   }
 
   displayFaceBox = (box) => {
@@ -75,10 +84,12 @@ class App extends Component {
 
     this.setState({ imageUrl: this.state.input });
 
-    if (this.state.radio == 'color') {
+    if (this.state.radio === 'color') {
       app.models
         .predict(Clarifai.COLOR_MODEL, this.state.input)
-        .then(response => console.log(response))
+        .then(response => this.setColorObjects(response))
+        .then(response => console.log(this.state.color_objects))
+        .catch(err => console.log(err));
     }
 
     else {
@@ -107,7 +118,16 @@ class App extends Component {
 
 
   render() {
-    const { isSignedIn, box, imageUrl, route, radio } = this.state;
+    const { isSignedIn, box, imageUrl, route, radio, color_objects, color_hidden } = this.state;
+    let colorlist;
+    if (color_hidden) {
+      colorlist = <ColorList hexlist={color_objects} />
+    }
+
+    else {
+      colorlist = null;
+    }
+
 
     return (
       <div className="App">
@@ -121,6 +141,7 @@ class App extends Component {
             <Rank />
             <RadioBar onRadioChange={this.onRadioChange} />
             <ImageLinkForm onSubmit={this.onSubmit} onInputChange={this.onInputChange} />
+            {colorlist}
             <FaceRecognition imageURL={imageUrl} box={box} />
           </>
           : (route === 'signin'
