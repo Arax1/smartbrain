@@ -43,6 +43,16 @@ class App extends Component {
       radio: 'image',
       route: 'signin',
       isSignedIn: false,
+
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+
+      },
+
       color_hidden: false,
       color_objects: {}
     }
@@ -116,10 +126,23 @@ class App extends Component {
     this.setState({ route: newroute });
   }
 
+  loadUser = (data) => {
+    this.setState({
+      user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined
+
+      }
+    });
+  }
+
 
 
   render() {
-    const { isSignedIn, box, imageUrl, route, radio, color_objects, color_hidden } = this.state;
+    const { isSignedIn, box, imageUrl, route, radio, color_objects, color_hidden, user } = this.state;
     let colorlist;
     if (color_hidden) {
       colorlist = <ColorList hexlist={color_objects} />
@@ -139,15 +162,15 @@ class App extends Component {
         {route === 'home'
           ? <>
             <Logo />
-            <Rank />
+            <Rank name={user.name} entries={user.entries} />
             <RadioBar onRadioChange={this.onRadioChange} />
             <ImageLinkForm onSubmit={this.onSubmit} onInputChange={this.onInputChange} />
             {colorlist}
             <FaceRecognition imageURL={imageUrl} box={box} />
           </>
           : (route === 'signin'
-            ? <SignIn onRouteChange={this.onRouteChange} />
-            : <Register rv={radio} onRouteChange={this.onRouteChange} />
+            ? <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+            : <Register loadUser={this.loadUser} rv={radio} onRouteChange={this.onRouteChange} />
           )
         }
       </div>
