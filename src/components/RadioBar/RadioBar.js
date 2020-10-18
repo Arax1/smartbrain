@@ -15,11 +15,6 @@ const RadioBar = ({ onRadioChange }) => {
                 <input id="color" name="radio" type="radio" value="color" onChange={onRadioChange} />
                 <label htmlFor="color" className="radio-label"><span className="white">Color</span></label>
             </div>
-
-            <div className="radio">
-                <input id="pattern" name="radio" type="radio" value="pattern" onChange={onRadioChange} />
-                <label htmlFor="pattern" className="radio-label"><span className="white">Pattern</span></label>
-            </div>
         </div>
     );
 
