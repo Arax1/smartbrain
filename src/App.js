@@ -9,15 +9,9 @@ import RadioBar from './components/RadioBar/RadioBar';
 import Rank from './components/Rank/Rank';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
 
 import './App.css';
 import 'tachyons';
-
-
-const app = new Clarifai.App({
-  apiKey: 'a5e2622354b94ef8a0814eff543bb828'
-})
 
 const particleParams = {
 
@@ -97,8 +91,15 @@ class App extends Component {
     this.setState({ imageUrl: this.state.input });
 
     if (this.state.radio === 'color') {
-      app.models
-        .predict(Clarifai.COLOR_MODEL, this.state.input)
+      fetch('http://localhost:3000/imageurl', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'color',
+          input: this.state.input
+        })
+      })
+        .then(response => response.json())
         .then(response => {
           if (response) {
             fetch('http://localhost:3000/image', {
@@ -120,8 +121,15 @@ class App extends Component {
     }
 
     else {
-      app.models
-        .predict('c0c0ac362b03416da06ab3fa36fb58e3', this.state.input)
+      fetch('http://localhost:3000/imageurl', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'face',
+          input: this.state.input
+        })
+      })
+        .then(response => response.json())
         .then(response => {
           if (response) {
             fetch('http://localhost:3000/image', {
