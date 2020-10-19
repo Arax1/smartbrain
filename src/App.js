@@ -32,29 +32,31 @@ const particleParams = {
   }
 };
 
+const initState = {
+  input: '',
+  imageUrl: '',
+  box: {},
+  radio: 'image',
+  route: 'signin',
+  isSignedIn: false,
+
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+
+  },
+
+  color_hidden: false,
+  color_objects: {}
+}
+
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      radio: 'image',
-      route: 'signin',
-      isSignedIn: false,
-
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-
-      },
-
-      color_hidden: false,
-      color_objects: {}
-    }
+    this.state = initState;
   }
 
 
@@ -119,7 +121,7 @@ class App extends Component {
 
     else {
       app.models
-        .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+        .predict('c0c0ac362b03416da06ab3fa36fb58e3', this.state.input)
         .then(response => {
           if (response) {
             fetch('http://localhost:3000/image', {
@@ -133,6 +135,7 @@ class App extends Component {
               .then(count => {
                 this.setState(Object.assign(this.state.user, { entries: count }))
               })
+              .catch(console.log)
           }
           this.displayFaceBox(this.calculateFaceLocation(response))
         })
@@ -146,7 +149,7 @@ class App extends Component {
   onRouteChange = (newroute) => {
 
     if (newroute === 'signout') {
-      this.setState({ isSignedIn: false })
+      this.setState(initState);
     }
 
     else if (newroute === 'home') {
