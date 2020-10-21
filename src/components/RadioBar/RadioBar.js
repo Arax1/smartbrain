@@ -7,7 +7,7 @@ const RadioBar = ({ onRadioChange }) => {
     return (
         <div className="container">
             <div className="radio">
-                <input id="image" name="radio" type="radio" value="image" onChange={onRadioChange} />
+                <input id="image" name="radio" type="radio" value="image" checked="checked" onChange={onRadioChange} />
                 <label htmlFor="image" className="radio-label"><span className="white">Image</span></label>
             </div>
 
